@@ -7,7 +7,7 @@ from typing import Tuple
 from torch.utils.data import DataLoader
 
 from config_base import BaseConfig
-from dataset import CelebAlmdb, FFHQlmdb, Horse_lmdb
+from dataset import CelebAlmdb, FFHQlmdb, Horse_lmdb, ImageNet_lmdb
 from diffusion import SpacedDiffusionBeatGansConfig
 from diffusion.base import (
     GenerativeType,
@@ -48,6 +48,7 @@ data_paths = {
         "datasets/celeba_anno/CelebAMask-HQ-attribute-anno.txt"
     ),
     "celeba_relight": os.path.expanduser("datasets/celeba_hq_light/celeba_light.txt"),
+    "imagenet256": os.path.expanduser("datasets/imagenet256.lmdb"),
 }
 
 
@@ -315,6 +316,11 @@ class TrainConfig(BaseConfig):
                 crop_d2c=True,
                 **kwargs,
             )
+        elif self.data_name == "imagenet256":
+            return ImageNet_lmdb(
+                path=path or self.data_path, image_size=self.img_size, **kwargs
+            )
+
         else:
             raise NotImplementedError()
 

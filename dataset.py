@@ -71,7 +71,9 @@ class ImageDataset(Dataset):
 
 class SubsetDataset(Dataset):
     def __init__(self, dataset, size):
-        assert len(dataset) >= size
+        assert len(dataset) >= size, (
+            f"Subset size ({size}) larger than dataset size ({len(dataset)})"
+        )
         self.dataset = dataset
         self.size = size
 
@@ -790,3 +792,56 @@ class Repeat(Dataset):
     def __getitem__(self, index):
         index = index % self.original_len
         return self.dataset[index]
+
+
+class ImageNet_lmdb(Dataset):
+    def __init__(
+        self,
+        path=os.path.expanduser("datasets/imagenet256.lmdb"),
+        image_size=256,
+        original_resolution=256,
+        split=None,
+        as_tensor: bool = True,
+        do_augment: bool = True,
+        do_normalize: bool = True,
+        **kwargs,
+    ):
+        self.original_resolution = original_resolution
+        self.data = BaseLMDB(
+            path, original_resolution, zfill=8
+        )  # ImageNet usually uses 8-digit keys
+        self.length = len(self.data)
+
+        if split is None:
+            self.offset = 0
+        elif split == "train":
+            # you can adjust train/test split if needed
+            self.offset = 0
+        elif split == "val":
+            # validation set
+            self.offset = 0  # adjust if needed
+        else:
+            raise NotImplementedError()
+
+        transform = [
+            transforms.Resize(image_size),
+            transforms.CenterCrop(image_size),
+        ]
+        if do_augment:
+            transform.append(transforms.RandomHorizontalFlip())
+        if as_tensor:
+            transform.append(transforms.ToTensor())
+        if do_normalize:
+            transform.append(transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)))
+        self.transform = transforms.Compose(transform)
+
+    def __len__(self):
+        return self.length
+
+    def __getitem__(self, index):
+        assert index < self.length
+        index = index + self.offset
+        img = self.data[index]
+        if self.transform is not None:
+            img = self.transform(img)
+        return {"img": img, "index": index}

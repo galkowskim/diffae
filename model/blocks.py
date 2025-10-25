@@ -247,6 +247,9 @@ class ResBlock(TimestepBlock):
                 if cond is None:
                     cond_out = None
                 else:
+                    if isinstance(cond, dict):
+                        cond = cond["cond"]
+
                     cond_out = self.cond_emb_layers(cond).type(h.dtype)
 
                 if cond_out is not None:
