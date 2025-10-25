@@ -5,11 +5,14 @@ import torch
 import torchvision
 from pytorch_fid import fid_score
 from torch import distributed
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 from torch.utils.data.distributed import DistributedSampler
 from tqdm.autonotebook import tqdm, trange
 
-from config import BeatGANsAutoencModel, TrainConfig, Dataset, Model, SubsetDataset
+
+from dataset import SubsetDataset
+from config import TrainConfig
+from model import BeatGANsAutoencModel, Model
 from diffusion import Sampler
 from dist_utils import (
     get_rank,

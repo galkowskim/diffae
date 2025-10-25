@@ -8,7 +8,7 @@ from torch import nn
 from .blocks import ResBlock
 
 
-from nn import timestep_embedding
+from .nn import timestep_embedding
 
 from typing import NamedTuple, Tuple
 
