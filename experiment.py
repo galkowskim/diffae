@@ -797,7 +797,7 @@ class LitModel(pl.LightningModule):
                     latent_sampler = None
 
                 conf = self.conf.clone()
-                conf.eval_num_images = 50_000
+                # conf.eval_num_images = 50_000
                 score = evaluate_fid(
                     sampler,
                     self.ema_model,

@@ -301,3 +301,90 @@ def pretrain_bedroom128():
     )
     conf.latent_infer_path = f"checkpoints/{bedroom128_autoenc().name}/latent.pkl"
     return conf
+
+
+def imagenet256_autoenc(dataset_size=2600, target_epochs=100):
+    """
+    ImageNet 256x256 autoencoder configuration.
+
+    Args:
+        dataset_size: Number of images in your dataset
+            - 2,600: 2-class subset (default)
+            - 13,000: 10-class subset
+            - 130,000: 100-class subset
+            - 1,281,167: Full ImageNet-1K
+        target_epochs: Number of epochs to train (default: 100)
+            - 100: Recommended for small subsets (2-100 classes)
+            - 156: Recommended for full ImageNet
+
+    The total_samples will be automatically calculated as:
+        total_samples = dataset_size × target_epochs
+
+    Examples:
+        # For 2-class training:
+        conf = imagenet256_autoenc(dataset_size=2600, target_epochs=100)
+
+        # For full ImageNet:
+        conf = imagenet256_autoenc(dataset_size=1281167, target_epochs=156)
+
+        # Quick test:
+        conf = imagenet256_autoenc(dataset_size=2600, target_epochs=5)
+    """
+    conf = autoenc_base()
+    conf.data_name = "imagenet256"
+    conf.img_size = 256
+    conf.net_ch = 128
+    conf.net_ch_mult = (1, 1, 2, 2, 4, 4)
+    conf.net_enc_channel_mult = (1, 1, 2, 2, 4, 4, 4)
+    conf.batch_size = 32
+
+    # Calculate total_samples based on dataset size and desired epochs
+    conf.total_samples = dataset_size * target_epochs
+
+    # Set evaluation frequency based on dataset size
+    if dataset_size < 10_000:
+        # Small subset (2-10 classes)
+        conf.eval_every_samples = min(25_000, conf.total_samples // 4)
+        conf.eval_ema_every_samples = min(25_000, conf.total_samples // 4)
+        conf.save_every_samples = min(50_000, conf.total_samples // 2)
+        conf.eval_num_images = min(500, dataset_size // 2)
+    elif dataset_size < 100_000:
+        # Medium subset (10-100 classes)
+        conf.eval_every_samples = 100_000
+        conf.eval_ema_every_samples = 100_000
+        conf.save_every_samples = 500_000
+        conf.eval_num_images = 1_000
+    else:
+        # Large dataset (100+ classes or full ImageNet)
+        conf.eval_every_samples = 1_000_000
+        conf.eval_ema_every_samples = 1_000_000
+        conf.save_every_samples = 5_000_000
+        conf.eval_num_images = 5_000
+
+    # conf.make_model_conf()
+    conf.name = "imagenet256_autoenc"
+
+    # Print configuration summary
+    print(f"\n{'=' * 70}")
+    print("ImageNet256 Autoencoder Configuration:")
+    print(f"{'=' * 70}")
+    print(f"  Dataset size:        {dataset_size:,} images")
+    print(f"  Target epochs:       {target_epochs}")
+    print(f"  Total samples:       {conf.total_samples:,}")
+    print(f"  Batch size:          {conf.batch_size}")
+    print(f"  Eval every:          {conf.eval_every_samples:,} samples")
+    print(f"  Save every:          {conf.save_every_samples:,} samples")
+    print(f"  Eval num images:     {conf.eval_num_images:,}")
+    print(f"{'=' * 70}\n")
+
+    return conf
+
+
+def pretrain_imagenet256_autoenc():
+    conf = imagenet256_autoenc()
+    conf.pretrain = PretrainConfig(
+        name="200M",
+        path=f"checkpoints/{imagenet256_autoenc().name}/last.ckpt",
+    )
+    conf.latent_infer_path = f"checkpoints/{imagenet256_autoenc().name}/latent.pkl"
+    return conf
