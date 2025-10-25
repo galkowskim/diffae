@@ -3,14 +3,21 @@
 # bunzip2 shape_predictor_68_face_landmarks.dat.bz2
 
 import os
+import math
 import torch
 from torchvision.utils import save_image
 import tempfile
-from templates import *
-from templates_cls import *
+from experiment import LitModel
+from templates import ffhq256_autoenc
+from templates_cls import ffhq256_autoenc_cls
+from dataset import ImageDataset, CelebAttrDataset
 from experiment_classifier import ClsModel
 from align import LandmarksDetector, image_align
 from cog import BasePredictor, Path, Input, BaseModel
+
+import torch.nn.functional as F
+
+from typing import List
 
 
 class ModelOutput(BaseModel):
@@ -111,7 +118,6 @@ class Predictor(BasePredictor):
         ),
         T_inv: int = Input(default=200, choices=[50, 100, 125, 200, 250, 500]),
     ) -> List[ModelOutput]:
-
         img_size = 256
         print("Aligning image...")
         for i, face_landmarks in enumerate(

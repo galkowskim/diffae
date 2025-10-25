@@ -1,7 +1,7 @@
-from templates_cls import *
-from experiment_classifier import *
+from templates_cls import ffhq128_autoenc_cls
+from experiment_classifier import train_cls
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # need to first train the diffae autoencoding model & infer the latents
     # this requires only a single GPU.
     gpus = [0]

@@ -1,8 +1,4 @@
-import argparse
-import multiprocessing
 import os
-from os.path import join, exists
-from functools import partial
 from io import BytesIO
 import shutil
 
@@ -11,8 +7,7 @@ from PIL import Image
 from torchvision.datasets import LSUNClass
 from torchvision.transforms import functional as trans_fn
 from tqdm import tqdm
-
-from multiprocessing import Process, Queue
+from torch.utils.data import Dataset, DataLoader
 
 
 def resize_and_convert(img, size, resample, quality=100):
@@ -25,10 +20,9 @@ def resize_and_convert(img, size, resample, quality=100):
     return val
 
 
-def resize_multiple(img,
-                    sizes=(128, 256, 512, 1024),
-                    resample=Image.LANCZOS,
-                    quality=100):
+def resize_multiple(
+    img, sizes=(128, 256, 512, 1024), resample=Image.LANCZOS, quality=100
+):
     imgs = []
 
     for size in sizes:
@@ -41,9 +35,6 @@ def resize_worker(idx, img, sizes, resample):
     img = img.convert("RGB")
     out = resize_multiple(img, sizes=sizes, resample=resample)
     return idx, out
-
-
-from torch.utils.data import Dataset, DataLoader
 
 
 class ConvertDataset(Dataset):
@@ -66,16 +57,14 @@ if __name__ == "__main__":
     from tqdm import tqdm
 
     # path to the original lsun's lmdb
-    src_path = 'datasets/bedroom_train_lmdb'
-    out_path = 'datasets/bedroom256.lmdb'
+    src_path = "datasets/bedroom_train_lmdb"
+    out_path = "datasets/bedroom256.lmdb"
 
     dataset = LSUNClass(root=os.path.expanduser(src_path))
     dataset = ConvertDataset(dataset)
-    loader = DataLoader(dataset,
-                        batch_size=50,
-                        num_workers=12,
-                        collate_fn=lambda x: x,
-                        shuffle=False)
+    loader = DataLoader(
+        dataset, batch_size=50, num_workers=12, collate_fn=lambda x: x, shuffle=False
+    )
 
     target = os.path.expanduser(out_path)
     if os.path.exists(target):
