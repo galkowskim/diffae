@@ -1,4 +1,5 @@
-from templates import imagenet256_autoenc, train
+from experiment import train
+from templates import imagenet256_autoenc
 from templates_latent import imagenet256_autoenc_latent
 
 # import torchvision
