@@ -1,0 +1,656 @@
+#!/usr/bin/env bash
+#SBATCH --partition long
+#SBATCH --account=mi2lab-normal
+#SBATCH --cpus-per-task=1
+#SBATCH --gres=gpu:4
+#SBATCH --mem=40G
+#SBATCH --time 3-23:59:00
+#SBATCH --job-name=diffae
+#SBATCH --output=logs/diffae-%A.log
+
+# echo file content to logs
+script_path=$(readlink -f "$0")
+cat $script_path
+
+source /etc/environment
+export NCCL_IB_DISABLE=1
+
+module load anaconda/4.0
+
+# activate env
+# . /mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/etc/profile.d/conda.sh
+# conda activate inp_exp
+
+# run exp
+# cd /mnt/evafs/groups/ganzha_23/mgalkowski/masters/inp_exp
+
+conda init
+eval "$(conda shell.bash hook)" # Add this line
+
+conda activate /mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae
+
+python run_imagenet256_lowgpu.py --num_gpus 4 --name imagenet256_experiment_lowgpu_$(date +%Y%m%d_%H%M%S)After loading the module, please run source to the CONDA_SOURCE variable.
+no change     /mnt/evafs/software/anaconda/v.4.0/condabin/conda
+no change     /mnt/evafs/software/anaconda/v.4.0/bin/conda
+no change     /mnt/evafs/software/anaconda/v.4.0/bin/conda-env
+no change     /mnt/evafs/software/anaconda/v.4.0/bin/activate
+no change     /mnt/evafs/software/anaconda/v.4.0/bin/deactivate
+no change     /mnt/evafs/software/anaconda/v.4.0/etc/profile.d/conda.sh
+no change     /mnt/evafs/software/anaconda/v.4.0/etc/fish/conf.d/conda.fish
+no change     /mnt/evafs/software/anaconda/v.4.0/shell/condabin/Conda.psm1
+no change     /mnt/evafs/software/anaconda/v.4.0/shell/condabin/conda-hook.ps1
+no change     /mnt/evafs/software/anaconda/v.4.0/lib/python3.12/site-packages/xontrib/conda.xsh
+no change     /mnt/evafs/software/anaconda/v.4.0/etc/profile.d/conda.csh
+no change     /home2/faculty/mgalkowski/.bashrc
+No action taken.
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torchmetrics/utilities/imports.py:21: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import DistributionNotFound, get_distribution
+Global seed set to 0
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:432: UserWarning: ModelCheckpoint(save_last=True, save_top_k=None, monitor=None) is a redundant configuration. You can save the last checkpoint with ModelCheckpoint(save_top_k=None, monitor=None).
+  rank_zero_warn(
+Using native 16bit precision.
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torchmetrics/utilities/imports.py:21: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import DistributionNotFound, get_distribution
+Global seed set to 0
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:432: UserWarning: ModelCheckpoint(save_last=True, save_top_k=None, monitor=None) is a redundant configuration. You can save the last checkpoint with ModelCheckpoint(save_top_k=None, monitor=None).
+  rank_zero_warn(
+Using native 16bit precision.
+Global seed set to 0
+initializing ddp: GLOBAL_RANK: 1, MEMBER: 2/4
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torchmetrics/utilities/imports.py:21: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import DistributionNotFound, get_distribution
+Global seed set to 0
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:432: UserWarning: ModelCheckpoint(save_last=True, save_top_k=None, monitor=None) is a redundant configuration. You can save the last checkpoint with ModelCheckpoint(save_top_k=None, monitor=None).
+  rank_zero_warn(
+Using native 16bit precision.
+Global seed set to 0
+initializing ddp: GLOBAL_RANK: 2, MEMBER: 3/4
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torchmetrics/utilities/imports.py:21: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import DistributionNotFound, get_distribution
+Global seed set to 0
+Global seed set to 0
+initializing ddp: GLOBAL_RANK: 0, MEMBER: 1/4
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:432: UserWarning: ModelCheckpoint(save_last=True, save_top_k=None, monitor=None) is a redundant configuration. You can save the last checkpoint with ModelCheckpoint(save_top_k=None, monitor=None).
+  rank_zero_warn(
+Using native 16bit precision.
+Global seed set to 0
+initializing ddp: GLOBAL_RANK: 3, MEMBER: 4/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All DDP processes registered. Starting ddp with 4 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3]
+Set SLURM handle signals.
+Set SLURM handle signals.
+Set SLURM handle signals.
+Set SLURM handle signals.
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/utils/data/dataloader.py:474: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/utils/data/dataloader.py:474: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/utils/data/dataloader.py:474: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+
+  | Name      | Type                 | Params
+---------------------------------------------------
+0 | model     | BeatGANsAutoencModel | 168 M 
+1 | ema_model | BeatGANsAutoencModel | 168 M 
+---------------------------------------------------
+168 M     Trainable params
+168 M     Non-trainable params
+336 M     Total params
+1,347.938 Total estimated model params size (MB)
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/utils/data/dataloader.py:474: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:322: UserWarning: The number of training samples (20) is smaller than the logging interval Trainer(log_every_n_steps=50). Set a lower value for log_every_n_steps if you want to see logs for the training epoch.
+  rank_zero_warn(
+/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/callbacks/lr_monitor.py:112: RuntimeWarning: You are using `LearningRateMonitor` callback with models that have no learning rate schedulers. Please see documentation for `configure_optimizers` method.
+  rank_zero_warn(
+
+======================================================================
+Training Configuration Summary:
+======================================================================
+  Dataset size:        2,600 images
+  Autoencoder epochs:  500
+  Latent DPM epochs:   500
+  Number of GPUs:      4
+======================================================================
+
+
+======================================================================
+STEP 1: Training Autoencoder (4 GPUs)
+======================================================================
+
+======================================================================
+ImageNet256 Autoencoder Configuration:
+======================================================================
+  Dataset size:        2,600 images
+  Target epochs:       500
+  Total samples:       1,300,000
+  Batch size:          32
+  Eval every:          25,000 samples
+  Save every:          50,000 samples
+  Eval num images:     500
+======================================================================
+
+Effective batch size: 128 × 4 GPUs × 1 accum = 128
+conf: imagenet256_experiment_lowgpu_20251108_094540_autoenc
+Model params: 160.69 M
+ckpt path: checkpoints/imagenet256_experiment_lowgpu_20251108_094540_autoenc/last.ckpt
+local seed: 0
+train data: 2600
+val data: 2600
+on train dataloader start ...
+Training: -1it [00:00, ?it/s]Training:   0%|          | 0/20 [00:00<00:00, 29127.11it/s]Epoch 0:   0%|          | 0/20 [00:00<00:00, 5949.37it/s]  
+======================================================================
+Training Configuration Summary:
+======================================================================
+  Dataset size:        2,600 images
+  Autoencoder epochs:  500
+  Latent DPM epochs:   500
+  Number of GPUs:      4
+======================================================================
+
+
+======================================================================
+STEP 1: Training Autoencoder (4 GPUs)
+======================================================================
+
+======================================================================
+ImageNet256 Autoencoder Configuration:
+======================================================================
+  Dataset size:        2,600 images
+  Target epochs:       500
+  Total samples:       1,300,000
+  Batch size:          32
+  Eval every:          25,000 samples
+  Save every:          50,000 samples
+  Eval num images:     500
+======================================================================
+
+Effective batch size: 128 × 4 GPUs × 1 accum = 128
+conf: imagenet256_experiment_lowgpu_20251108_094540_autoenc
+Model params: 160.69 M
+ckpt path: checkpoints/imagenet256_experiment_lowgpu_20251108_094540_autoenc/last.ckpt
+local seed: 1
+train data: 2600
+val data: 2600
+on train dataloader start ...
+
+======================================================================
+Training Configuration Summary:
+======================================================================
+  Dataset size:        2,600 images
+  Autoencoder epochs:  500
+  Latent DPM epochs:   500
+  Number of GPUs:      4
+======================================================================
+
+
+======================================================================
+STEP 1: Training Autoencoder (4 GPUs)
+======================================================================
+
+======================================================================
+ImageNet256 Autoencoder Configuration:
+======================================================================
+  Dataset size:        2,600 images
+  Target epochs:       500
+  Total samples:       1,300,000
+  Batch size:          32
+  Eval every:          25,000 samples
+  Save every:          50,000 samples
+  Eval num images:     500
+======================================================================
+
+Effective batch size: 128 × 4 GPUs × 1 accum = 128
+conf: imagenet256_experiment_lowgpu_20251108_094540_autoenc
+Model params: 160.69 M
+ckpt path: checkpoints/imagenet256_experiment_lowgpu_20251108_094540_autoenc/last.ckpt
+local seed: 3
+train data: 2600
+val data: 2600
+on train dataloader start ...
+
+======================================================================
+Training Configuration Summary:
+======================================================================
+  Dataset size:        2,600 images
+  Autoencoder epochs:  500
+  Latent DPM epochs:   500
+  Number of GPUs:      4
+======================================================================
+
+
+======================================================================
+STEP 1: Training Autoencoder (4 GPUs)
+======================================================================
+
+======================================================================
+ImageNet256 Autoencoder Configuration:
+======================================================================
+  Dataset size:        2,600 images
+  Target epochs:       500
+  Total samples:       1,300,000
+  Batch size:          32
+  Eval every:          25,000 samples
+  Save every:          50,000 samples
+  Eval num images:     500
+======================================================================
+
+Effective batch size: 128 × 4 GPUs × 1 accum = 128
+conf: imagenet256_experiment_lowgpu_20251108_094540_autoenc
+Model params: 160.69 M
+ckpt path: checkpoints/imagenet256_experiment_lowgpu_20251108_094540_autoenc/last.ckpt
+local seed: 2
+train data: 2600
+val data: 2600
+on train dataloader start ...
+Traceback (most recent call last):
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/run_imagenet256_lowgpu.py", line 89, in <module>
+    train(conf, gpus=gpus)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 961, in train
+Traceback (most recent call last):
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/run_imagenet256_lowgpu.py", line 89, in <module>
+    train(conf, gpus=gpus)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 961, in train
+Traceback (most recent call last):
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/run_imagenet256_lowgpu.py", line 89, in <module>
+    train(conf, gpus=gpus)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 961, in train
+Traceback (most recent call last):
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/run_imagenet256_lowgpu.py", line 89, in <module>
+    train(conf, gpus=gpus)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 961, in train
+    trainer.fit(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 917, in _run
+    self._dispatch()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 985, in _dispatch
+    self.accelerator.start_training(self)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    trainer.fit(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 917, in _run
+    self._dispatch()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 985, in _dispatch
+    self.accelerator.start_training(self)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    trainer.fit(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 917, in _run
+    self._dispatch()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 985, in _dispatch
+    self.accelerator.start_training(self)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    trainer.fit(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 917, in _run
+    self._dispatch()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 985, in _dispatch
+    self.accelerator.start_training(self)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    self._results = trainer.run_stage()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 995, in run_stage
+    return self._run_train()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1044, in _run_train
+    self.fit_loop.run()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    self._results = trainer.run_stage()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 995, in run_stage
+    return self._run_train()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1044, in _run_train
+    self.fit_loop.run()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    self._results = trainer.run_stage()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 995, in run_stage
+    return self._run_train()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1044, in _run_train
+    self.fit_loop.run()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    self._results = trainer.run_stage()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 995, in run_stage
+    return self._run_train()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1044, in _run_train
+    self.fit_loop.run()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1618, in optimizer_step
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1618, in optimizer_step
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1618, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 209, in step
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1618, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 209, in step
+    optimizer.step(closure=optimizer_closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 209, in step
+    self.__optimizer_step(*args, closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 129, in __optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 209, in step
+    trainer.accelerator.optimizer_step(optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 292, in optimizer_step
+    make_optimizer_step = self.precision_plugin.pre_optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/native_amp.py", line 59, in pre_optimizer_step
+    self.__optimizer_step(*args, closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 129, in __optimizer_step
+    trainer.accelerator.optimizer_step(optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 292, in optimizer_step
+    make_optimizer_step = self.precision_plugin.pre_optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/native_amp.py", line 59, in pre_optimizer_step
+    self.__optimizer_step(*args, closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 129, in __optimizer_step
+    trainer.accelerator.optimizer_step(optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 292, in optimizer_step
+    make_optimizer_step = self.precision_plugin.pre_optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/native_amp.py", line 59, in pre_optimizer_step
+    result = lambda_closure()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 536, in training_step_and_backward
+    result = self._training_step(split_batch, batch_idx, opt_idx, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 306, in _training_step
+    training_step_output = self.trainer.accelerator.training_step(step_kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 193, in training_step
+    return self.training_type_plugin.training_step(*step_kwargs.values())
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/ddp.py", line 384, in training_step
+    return self.model(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    self.__optimizer_step(*args, closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 129, in __optimizer_step
+    trainer.accelerator.optimizer_step(optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 292, in optimizer_step
+    make_optimizer_step = self.precision_plugin.pre_optimizer_step(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/native_amp.py", line 59, in pre_optimizer_step
+    result = lambda_closure()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 536, in training_step_and_backward
+    result = self._training_step(split_batch, batch_idx, opt_idx, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 306, in _training_step
+    training_step_output = self.trainer.accelerator.training_step(step_kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 193, in training_step
+    return self.training_type_plugin.training_step(*step_kwargs.values())
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/ddp.py", line 384, in training_step
+    return self.model(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = lambda_closure()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 536, in training_step_and_backward
+    result = self._training_step(split_batch, batch_idx, opt_idx, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 306, in _training_step
+    training_step_output = self.trainer.accelerator.training_step(step_kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 193, in training_step
+    return self.training_type_plugin.training_step(*step_kwargs.values())
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/ddp.py", line 384, in training_step
+    return self.model(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = lambda_closure()
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 536, in training_step_and_backward
+    result = self._training_step(split_batch, batch_idx, opt_idx, hiddens)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 306, in _training_step
+    training_step_output = self.trainer.accelerator.training_step(step_kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 193, in training_step
+    return self.training_type_plugin.training_step(*step_kwargs.values())
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/ddp.py", line 384, in training_step
+    return self.model(*args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 705, in forward
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 705, in forward
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 705, in forward
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 705, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/overrides/base.py", line 82, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/overrides/base.py", line 82, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/overrides/base.py", line 82, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/pytorch_lightning/overrides/base.py", line 82, in forward
+    output = self.module.training_step(*inputs, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 365, in training_step
+    output = self.module.training_step(*inputs, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 365, in training_step
+    losses = self.sampler.training_losses(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 107, in training_losses
+    losses = self.sampler.training_losses(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 107, in training_losses
+    output = self.module.training_step(*inputs, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 365, in training_step
+    losses = self.sampler.training_losses(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 107, in training_losses
+    output = self.module.training_step(*inputs, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/experiment.py", line 365, in training_step
+    losses = self.sampler.training_losses(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 107, in training_losses
+    return super().training_losses(self._wrap_model(model), *args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/base.py", line 136, in training_losses
+    return super().training_losses(self._wrap_model(model), *args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/base.py", line 136, in training_losses
+    return super().training_losses(self._wrap_model(model), *args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/base.py", line 136, in training_losses
+    return super().training_losses(self._wrap_model(model), *args, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/base.py", line 136, in training_losses
+    model_forward = model.forward(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 156, in forward
+    model_forward = model.forward(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 156, in forward
+    model_forward = model.forward(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 156, in forward
+    model_forward = model.forward(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/diffusion/diffusion.py", line 156, in forward
+    return self.model(x=x, t=do(t), t_cond=t_cond, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/unet_autoenc.py", line 254, in forward
+    return self.model(x=x, t=do(t), t_cond=t_cond, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/unet_autoenc.py", line 254, in forward
+    return self.model(x=x, t=do(t), t_cond=t_cond, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/unet_autoenc.py", line 254, in forward
+    h = self.output_blocks[k](
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 49, in forward
+    return self.model(x=x, t=do(t), t_cond=t_cond, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/unet_autoenc.py", line 254, in forward
+    h = self.output_blocks[k](
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 49, in forward
+    h = self.output_blocks[k](
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 49, in forward
+    x = layer(x, emb=emb, cond=cond, lateral=lateral)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 204, in forward
+    return torch_checkpoint(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 133, in torch_checkpoint
+    x = layer(x, emb=emb, cond=cond, lateral=lateral)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 204, in forward
+    h = self.output_blocks[k](
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 49, in forward
+    x = layer(x, emb=emb, cond=cond, lateral=lateral)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 204, in forward
+    return torch_checkpoint(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 133, in torch_checkpoint
+    return torch_checkpoint(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 133, in torch_checkpoint
+    return func(*args)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 232, in _forward
+    h = self.in_layers(x)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/container.py", line 119, in forward
+    return func(*args)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 232, in _forward
+    h = self.in_layers(x)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/container.py", line 119, in forward
+    x = layer(x, emb=emb, cond=cond, lateral=lateral)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 204, in forward
+    return torch_checkpoint(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 133, in torch_checkpoint
+    return func(*args)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 232, in _forward
+    h = self.in_layers(x)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/container.py", line 119, in forward
+    return func(*args)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/blocks.py", line 232, in _forward
+    h = self.in_layers(x)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/container.py", line 119, in forward
+    input = module(input)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 21, in forward
+    return super().forward(x.float()).type(x.dtype)
+RuntimeError: CUDA out of memory. Tried to allocate 256.00 MiB (GPU 1; 39.49 GiB total capacity; 36.82 GiB already allocated; 217.56 MiB free; 37.03 GiB reserved in total by PyTorch)
+    input = module(input)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 21, in forward
+    return super().forward(x.float()).type(x.dtype)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/normalization.py", line 246, in forward
+    input = module(input)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 21, in forward
+    return super().forward(x.float()).type(x.dtype)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/normalization.py", line 246, in forward
+    input = module(input)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/modules/module.py", line 889, in _call_impl
+    result = self.forward(*input, **kwargs)
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/diffae/model/nn.py", line 21, in forward
+    return super().forward(x.float()).type(x.dtype)
+RuntimeError: CUDA out of memory. Tried to allocate 256.00 MiB (GPU 2; 39.49 GiB total capacity; 36.82 GiB already allocated; 203.56 MiB free; 37.03 GiB reserved in total by PyTorch)
+    return F.group_norm(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/functional.py", line 2218, in group_norm
+    return F.group_norm(
+  File "/mnt/evafs/groups/ganzha_23/mgalkowski/miniconda3/envs/diffae/lib/python3.9/site-packages/torch/nn/functional.py", line 2218, in group_norm
+    return torch.group_norm(input, num_groups, weight, bias, eps, torch.backends.cudnn.enabled)
+RuntimeError: CUDA out of memory. Tried to allocate 256.00 MiB (GPU 3; 39.49 GiB total capacity; 37.07 GiB already allocated; 33.56 MiB free; 37.28 GiB reserved in total by PyTorch)
+    return torch.group_norm(input, num_groups, weight, bias, eps, torch.backends.cudnn.enabled)
+RuntimeError: CUDA out of memory. Tried to allocate 256.00 MiB (GPU 0; 39.49 GiB total capacity; 37.07 GiB already allocated; 43.56 MiB free; 37.28 GiB reserved in total by PyTorch)
+Epoch 0:   0%|          | 0/20 [00:29<09:41, 29.08s/it]  

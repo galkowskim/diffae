@@ -2,7 +2,7 @@ from experiment import train
 from templates import imagenet256_autoenc
 from templates_latent import imagenet256_autoenc_latent
 import argparse
-
+import torch
 
 if __name__ == "__main__":
     # =============================================================================
@@ -65,6 +65,10 @@ if __name__ == "__main__":
     print(f"  Latent DPM epochs:   {LATENT_EPOCHS}")
     print(f"  Number of GPUs:      {NUM_GPUS}")
     print(f"{'=' * 70}\n")
+
+    assert torch.cuda.device_count() >= NUM_GPUS, (
+        f"Requested {NUM_GPUS} GPUs, but only {torch.cuda.device_count()} available."
+    )
 
     if NUM_GPUS == 4:
         # Step 1: train the autoencoder with 4 GPUs
