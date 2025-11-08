@@ -79,13 +79,16 @@ if __name__ == "__main__":
         conf = imagenet256_autoenc(
             dataset_size=DATASET_SIZE, target_epochs=AUTOENC_EPOCHS
         )
-        conf.scale_up_gpus(4)  # Scale for 4 GPUs
-        conf.accum_batches = 1
+        # Keep global batch small to avoid OOM; match 1-GPU memory (local ~8)
+        # Global batch = 32, 4 GPUs => local batch = 8; accum 4 => effective 128
+        conf.accum_batches = 4
+        # Ensure global batch is 32 (default), in case templates change
+        conf.batch_size = 32
         if args.name:
             conf.name = f"{args.name}_autoenc"
-        print(
-            f"Effective batch size: {conf.batch_size} × 4 GPUs × {conf.accum_batches} accum = {conf.batch_size_effective}"
-        )
+        local_bs = conf.batch_size // len(gpus)
+        print(f"Global batch: {conf.batch_size} (local {local_bs} × {len(gpus)} GPUs), "
+              f"accum: {conf.accum_batches} ⇒ effective: {conf.batch_size_effective}")
         train(conf, gpus=gpus)
 
         # Step 2: infer latents for training the latent DPM
