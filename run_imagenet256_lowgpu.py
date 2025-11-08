@@ -1,11 +1,29 @@
 from templates import imagenet256_autoenc, train
 from templates_latent import imagenet256_autoenc_latent
+import argparse
 
 
 if __name__ == "__main__":
     # =============================================================================
     # CONFIGURATION FOR IMAGENET TRAINING
     # =============================================================================
+
+    # ===== CLI ARGUMENTS =====
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--name",
+        type=str,
+        default=None,
+        help="Base experiment name (suffixes _autoenc/_latent will be added).",
+    )
+    parser.add_argument(
+        "--num_gpus",
+        type=int,
+        default=1,
+        choices=[1, 2, 4],
+        help="Number of GPUs to use: 1, 2, or 4.",
+    )
+    args, _ = parser.parse_known_args()
 
     # ===== STEP 1: CONFIGURE YOUR DATASET =====
     # Set your dataset size based on how many classes you're training on:
@@ -16,11 +34,11 @@ if __name__ == "__main__":
 
     # ===== STEP 2: CONFIGURE TRAINING LENGTH =====
     # Set number of epochs:
-    AUTOENC_EPOCHS = 100  # Recommended: 100 for small subsets, 156 for full ImageNet
-    LATENT_EPOCHS = 100  # Recommended: 100 for small subsets, 80 for full ImageNet
+    AUTOENC_EPOCHS = 500
+    LATENT_EPOCHS = 500
 
     # ===== STEP 3: CONFIGURE GPU SETUP =====
-    NUM_GPUS = 1  # Change to 2 if you have 2 GPUs available
+    NUM_GPUS = args.num_gpus
 
     # =============================================================================
     # GRADIENT ACCUMULATION SETUP (maintains effective batch size)
@@ -47,7 +65,58 @@ if __name__ == "__main__":
     print(f"  Number of GPUs:      {NUM_GPUS}")
     print(f"{'=' * 70}\n")
 
-    if NUM_GPUS == 2:
+    if NUM_GPUS == 4:
+        # Step 1: train the autoencoder with 4 GPUs
+        print("\n" + "=" * 70)
+        print("STEP 1: Training Autoencoder (4 GPUs)")
+        print("=" * 70)
+        gpus = [0, 1, 2, 3]
+        conf = imagenet256_autoenc(
+            dataset_size=DATASET_SIZE, target_epochs=AUTOENC_EPOCHS
+        )
+        conf.scale_up_gpus(4)  # Scale for 4 GPUs
+        conf.accum_batches = 1
+        if args.name:
+            conf.name = f"{args.name}_autoenc"
+        print(
+            f"Effective batch size: {conf.batch_size} × 4 GPUs × {conf.accum_batches} accum = {conf.batch_size_effective}"
+        )
+        train(conf, gpus=gpus)
+
+        # Step 2: infer latents for training the latent DPM
+        print("\n" + "=" * 70)
+        print("STEP 2: Inferring Latents")
+        print("=" * 70)
+        gpus = [0, 1, 2, 3]
+        conf.eval_programs = ["infer"]
+        train(conf, gpus=gpus, mode="eval")
+
+        # Step 3: train the latent DPM with 1 GPU
+        print("\n" + "=" * 70)
+        print("STEP 3: Training Latent DPM (1 GPU)")
+        print("=" * 70)
+        gpus = [0]
+        conf = imagenet256_autoenc_latent(
+            dataset_size=DATASET_SIZE, target_epochs=LATENT_EPOCHS
+        )
+        conf.batch_size = 128  # Reduce batch size
+        conf.accum_batches = 2  # Accumulate gradients over 2 batches (effective 256)
+        if args.name:
+            conf.name = f"{args.name}_latent"
+        print(
+            f"Effective batch size: {conf.batch_size} × 1 GPU × {conf.accum_batches} accum = {conf.batch_size * conf.accum_batches}"
+        )
+        train(conf, gpus=gpus)
+
+        # Step 4: unconditional sampling + FID evaluation
+        print("\n" + "=" * 70)
+        print("STEP 4: Evaluation")
+        print("=" * 70)
+        gpus = [0, 1, 2, 3]
+        conf.eval_programs = ["fid(10,10)"]
+        train(conf, gpus=gpus, mode="eval")
+
+    elif NUM_GPUS == 2:
         # Step 1: train the autoencoder with 2 GPUs
         print("\n" + "=" * 70)
         print("STEP 1: Training Autoencoder (2 GPUs)")
@@ -58,6 +127,8 @@ if __name__ == "__main__":
         )
         conf.scale_up_gpus(2)  # Scale for 2 GPUs instead of 4
         conf.accum_batches = 2  # Accumulate gradients over 2 batches
+        if args.name:
+            conf.name = f"{args.name}_autoenc"
         print(
             f"Effective batch size: {conf.batch_size} × 2 GPUs × 2 accum = {conf.batch_size_effective}"
         )
@@ -81,6 +152,8 @@ if __name__ == "__main__":
         )
         conf.batch_size = 128  # Reduce batch size
         conf.accum_batches = 2  # Accumulate gradients over 2 batches
+        if args.name:
+            conf.name = f"{args.name}_latent"
         print(
             f"Effective batch size: {conf.batch_size} × 1 GPU × 2 accum = {conf.batch_size * 2}"
         )
@@ -107,6 +180,8 @@ if __name__ == "__main__":
         conf.batch_size_eval = 8
         conf.accum_batches = 16  # Accumulate gradients over 4 batches
         conf.make_model_conf()
+        if args.name:
+            conf.name = f"{args.name}_autoenc"
 
         print(
             f"Effective batch size: {conf.batch_size} × 1 GPU × {conf.accum_batches} accum = {conf.batch_size_effective}"
@@ -134,6 +209,8 @@ if __name__ == "__main__":
         conf.batch_size = 16  # Reduce batch size
         conf.batch_size_eval = 16  # Reduce batch size
         conf.accum_batches = 16  # Accumulate gradients over 4 batches
+        if args.name:
+            conf.name = f"{args.name}_latent"
         # print(f"Effective batch size: {conf.batch_size} × 1 GPU × {conf.accum_batches} accum = {conf.batch_size * conf.accum_batches}")
         # train(conf, gpus=gpus)
 
@@ -146,4 +223,4 @@ if __name__ == "__main__":
         conf.eval_programs = ["fid(10,10)"]
         train(conf, gpus=gpus, mode="eval")
     else:
-        raise ValueError(f"NUM_GPUS must be 1 or 2, got {NUM_GPUS}")
+        raise ValueError(f"NUM_GPUS must be 1, 2 or 4, got {NUM_GPUS}")
