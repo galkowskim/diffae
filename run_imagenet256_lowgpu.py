@@ -35,8 +35,8 @@ if __name__ == "__main__":
 
     # ===== STEP 2: CONFIGURE TRAINING LENGTH =====
     # Set number of epochs:
-    AUTOENC_EPOCHS = 500
-    LATENT_EPOCHS = 500
+    AUTOENC_EPOCHS = 2500
+    LATENT_EPOCHS = 2500
 
     # ===== STEP 3: CONFIGURE GPU SETUP =====
     NUM_GPUS = args.num_gpus
