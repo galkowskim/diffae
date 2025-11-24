@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 1) Point to your trained checkpoint
-CKPT = "checkpoints/<your_run_name>/last.ckpt"  # e.g., checkpoints/imagenet256_experiment_lowgpu_20251108_094540_autoenc/last.ckpt
+CKPT = "/mnt/evafs/groups/ganzha_23/mgalkowski/copy_testing/gcd/gcd/last.ckpt"
 OUT_DIR = "quick_samples"
 os.makedirs(OUT_DIR, exist_ok=True)
 
@@ -23,7 +23,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # 3) Build config/model and load weights
 conf = imagenet256_autoenc()  # architecture + samplers
 model = LitModel(conf)
-state = torch.load(CKPT, map_location="cpu")
+state = torch.load(CKPT, map_location="cpu", weights_only=False)
 print("Loaded step:", state.get("global_step"))
 model.load_state_dict(state["state_dict"], strict=False)
 model.to(device).eval()
@@ -50,9 +50,13 @@ with torch.no_grad():
         # Fallback: reconstruct 16 real images from HF ImageNet to sanity check the pipeline
         tfm = T.Compose([T.Resize(conf.img_size), T.CenterCrop(conf.img_size), T.ToTensor()])
         imgs_01 = []
-        ds = load_dataset("imagenet-1k", split="train", streaming=True)
+        ds = load_dataset("imagenet-1k", split="train", streaming=True, cache_dir=os.getenv("DATASET_CACHE", None), token=os.environ["HF_TOKEN"])
         for ex in ds:
+            if not (ex['label'] in (339, 340)):
+                continue
+            
             img = ex["image"]
+            
             if not isinstance(img, Image.Image):
                 img = Image.fromarray(img)
             img = img.convert("RGB")
