@@ -4,6 +4,13 @@ import torch
 import torchvision
 from templates import imagenet256_autoenc
 from experiment import LitModel
+from datasets import load_dataset
+import torchvision.transforms as T
+from PIL import Image
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # 1) Point to your trained checkpoint
 CKPT = "checkpoints/<your_run_name>/last.ckpt"  # e.g., checkpoints/imagenet256_experiment_lowgpu_20251108_094540_autoenc/last.ckpt
@@ -26,18 +33,44 @@ model.to(device).eval()
 from model.unet_autoenc import BeatGANsAutoencModel
 with torch.no_grad():
     N = 16
-    x_T = torch.randn(N, 3, conf.img_size, conf.img_size, device=device)
     model_ae: BeatGANsAutoencModel = model.ema_model
-    # sample style and map to conditioning
-    z = torch.randn(N, conf.style_ch, device=device)
-    cond = model_ae.noise_to_cond(z)
-    # use T=100 for sharper samples
     sampler_T100 = conf._make_diffusion_conf(T=100).make_sampler()
-    gen = sampler_T100.sample(model=model_ae, noise=x_T, cond=cond)  # [-1,1]
-    gen = (gen + 1) / 2  # [0,1]
-    grid = torchvision.utils.make_grid(gen, nrow=4)
-    torchvision.utils.save_image(grid, os.path.join(OUT_DIR, "samples_T100_autoenc.png"))
-print("Saved:", os.path.join(OUT_DIR, "samples_T100_autoenc.png"))
+    try:
+        # Try true unconditional: sample random style -> cond
+        x_T = torch.randn(N, 3, conf.img_size, conf.img_size, device=device)
+        z = torch.randn(N, conf.style_ch, device=device)
+        cond = model_ae.noise_to_cond(z)  # may not exist for some builds
+        gen = sampler_T100.sample(model=model_ae, noise=x_T, cond=cond)  # [-1,1]
+        gen = (gen + 1) / 2  # [0,1]
+        grid = torchvision.utils.make_grid(gen, nrow=4)
+        out = os.path.join(OUT_DIR, "samples_T100_autoenc.png")
+        torchvision.utils.save_image(grid, out)
+        print("Saved:", out)
+    except (AttributeError, NotImplementedError):
+        # Fallback: reconstruct 16 real images from HF ImageNet to sanity check the pipeline
+        tfm = T.Compose([T.Resize(conf.img_size), T.CenterCrop(conf.img_size), T.ToTensor()])
+        imgs_01 = []
+        ds = load_dataset("imagenet-1k", split="train", streaming=True)
+        for ex in ds:
+            img = ex["image"]
+            if not isinstance(img, Image.Image):
+                img = Image.fromarray(img)
+            img = img.convert("RGB")
+            imgs_01.append(tfm(img))
+            if len(imgs_01) == N:
+                break
+        x01 = torch.stack(imgs_01).to(device)         # [0,1]
+        x_m1p1 = (x01 - 0.5) * 2                      # [-1,1]
+        x_T = torch.randn_like(x_m1p1)
+        gen = sampler_T100.sample(model=model_ae, noise=x_T, cond=None, x_start=x_m1p1)
+        gen = (gen + 1) / 2
+        grid_in = torchvision.utils.make_grid(x01, nrow=4)
+        grid_out = torchvision.utils.make_grid(gen, nrow=4)
+        out_in = os.path.join(OUT_DIR, "fallback_recon_input.png")
+        out_out = os.path.join(OUT_DIR, "fallback_recon_output.png")
+        torchvision.utils.save_image(grid_in, out_in)
+        torchvision.utils.save_image(grid_out, out_out)
+        print("Saved:", out_in, "and", out_out)
 
 # 5) Optional: quick reconstruction sanity-check on random noise x_start
 #    (uses x_start to guide sampling; shows the pipeline is wired correctly)
