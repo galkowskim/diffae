@@ -21,13 +21,23 @@ print("Loaded step:", state.get("global_step"))
 model.load_state_dict(state["state_dict"], strict=False)
 model.to(device).eval()
 
-# 4) Unconditional sampling
+# 4) Unconditional sampling for autoencoder:
+#    sample random style -> map to conditioning -> DDIM sampling
+from model.unet_autoenc import BeatGANsAutoencModel
 with torch.no_grad():
-    # T controls DDIM steps; 100 is a good default (matches other configs)
-    samples = model.sample(N=16, device=device, T=100)  # returns [0,1]
-    grid = torchvision.utils.make_grid(samples, nrow=4)
-    torchvision.utils.save_image(grid, os.path.join(OUT_DIR, "samples_T100.png"))
-print("Saved:", os.path.join(OUT_DIR, "samples_T100.png"))
+    N = 16
+    x_T = torch.randn(N, 3, conf.img_size, conf.img_size, device=device)
+    model_ae: BeatGANsAutoencModel = model.ema_model
+    # sample style and map to conditioning
+    z = torch.randn(N, conf.style_ch, device=device)
+    cond = model_ae.noise_to_cond(z)
+    # use T=100 for sharper samples
+    sampler_T100 = conf._make_diffusion_conf(T=100).make_sampler()
+    gen = sampler_T100.sample(model=model_ae, noise=x_T, cond=cond)  # [-1,1]
+    gen = (gen + 1) / 2  # [0,1]
+    grid = torchvision.utils.make_grid(gen, nrow=4)
+    torchvision.utils.save_image(grid, os.path.join(OUT_DIR, "samples_T100_autoenc.png"))
+print("Saved:", os.path.join(OUT_DIR, "samples_T100_autoenc.png"))
 
 # 5) Optional: quick reconstruction sanity-check on random noise x_start
 #    (uses x_start to guide sampling; shows the pipeline is wired correctly)
