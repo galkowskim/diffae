@@ -3,6 +3,7 @@ from templates import imagenet256_autoenc
 from templates_latent import imagenet256_autoenc_latent
 import argparse
 import torch
+from config import data_paths
 
 if __name__ == "__main__":
     # =============================================================================
@@ -23,6 +24,12 @@ if __name__ == "__main__":
         default=1,
         choices=[1, 2, 4],
         help="Number of GPUs to use: 1, 2, or 4.",
+    )
+    parser.add_argument(
+        "--dataset_path",
+        type=str,
+        default=None,
+        help="Path to the ImageNet LMDB dataset (e.g., /path/to/imagenet256_subset.lmdb). Overrides default.",
     )
     args, _ = parser.parse_known_args()
 
@@ -65,6 +72,11 @@ if __name__ == "__main__":
     print(f"  Latent DPM epochs:   {LATENT_EPOCHS}")
     print(f"  Number of GPUs:      {NUM_GPUS}")
     print(f"{'=' * 70}\n")
+
+    # Optionally override dataset path for imagenet256
+    if args.dataset_path:
+        data_paths["imagenet256"] = args.dataset_path
+        print(f"[Dataset] Using custom LMDB path for imagenet256: {data_paths['imagenet256']}")
 
     assert torch.cuda.device_count() >= NUM_GPUS, (
         f"Requested {NUM_GPUS} GPUs, but only {torch.cuda.device_count()} available."
