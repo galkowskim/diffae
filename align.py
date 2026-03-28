@@ -69,7 +69,7 @@ def image_align(
             int(np.rint(float(img.size[0]) / shrink)),
             int(np.rint(float(img.size[1]) / shrink)),
         )
-        img = img.resize(rsize, PIL.Image.ANTIALIAS)
+        img = img.resize(rsize, PIL.Image.LANCZOS)
         quad /= shrink
         qsize /= shrink
 
@@ -131,7 +131,7 @@ def image_align(
         PIL.Image.BILINEAR,
     )
     if output_size < transform_size:
-        img = img.resize((output_size, output_size), PIL.Image.ANTIALIAS)
+        img = img.resize((output_size, output_size), PIL.Image.LANCZOS)
 
     # Save aligned image.
     img.save(dst_file, "PNG")
